@@ -1,0 +1,35 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<head>
+    <link type="text/css" rel="stylesheet" href="{% static 'css/cssregister.css' %}">
+    <title>Registro de Usuario</title>
+</head>
+
+<body>
+    <div class="form">
+        <h3>REGISTRO DE USUARIO</h3>
+        <br>
+        <form id="register-form" action="{% url 'register' %}" method="post">
+            {% csrf_token %}
+            <div class="card mx-auto" style="width: 30rem;">
+                <div class="card-body">
+                    <h5 class="card-title">Complete todos los campos</h5>
+                    
+                    <!-- Renderizar el formulario con crispy -->
+                    {{ form | crispy }}
+
+                    <div class="button-group">
+                        <a href="{% url 'home' %}" class="card-link">Inicio</a>
+                        <a href="{% url 'login' %}" class="card-link">Iniciar sesión</a>
+                        <button class="btn btn-sm btn-primary float-end" type="submit">Registrarse</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+
+{% endblock %}

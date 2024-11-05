@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kats</title>
+    <link type="text/css" rel="stylesheet" href="{% static 'css/navbar.css' %}">
+</head>
+<body>
+    <header class="opaque-navbar">
+        <nav class="container">
+            <ul class="navbar">
+                <li><a href="{% url 'home' %}">Home</a></li>
+                
+                {% if request.user.is_authenticated %}    
+                    <li><a href="{% url 'enviar_propuesta' %}">Enviar propuesta</a></li>    
+                    <li><a href="{% url 'voto' %}">votar</a></li>
+                    <li><a href="{% url 'estadisticas' %}">estadisticas</a></li>
+                    <li><a href="{% url 'exit' %}">Salir</a></li>
+                {% else %}
+                   <li><a href="{% url 'login' %}">Ingresar</a></li>
+                   <li><a href="{% url 'register' %}">Register</a></li>
+
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+    
+    {% block content %}{% endblock %}
+</body>
+</html>

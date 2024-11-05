@@ -1,0 +1,53 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio - Propuestas</title>
+    <link rel="stylesheet" href="{% static 'css/plantillahome.css' %}"> <!-- Ajusta la ruta según tu proyecto -->
+</head>
+<body>
+
+<div class="propuestas-container">
+    <h3>Inicio</h3>
+    <hr>
+
+    {% if request.user.is_authenticated %}    
+        <p>Bienvenido, {{ tipo_usuario.user.username }}</p>
+        <p>Tipo de usuario: {{ tipo_usuario.get_tipo_usuario_display }}</p>
+
+    {% else %}
+        <p><a href="{% url 'login' %}">Ingresar</a></p>
+    {% endif %}
+
+    <h1>Propuestas</h1>
+    
+    <ul>
+        {% for propuesta in propuestas %}
+            <li>
+                <p><strong>Título:</strong> {{ propuesta.Titulo }}</p>
+                <p><strong>Descripción:</strong> {{ propuesta.Descripcion }}</p>
+                <p><strong>Zona:</strong> {{ propuesta.Zona }}</p>
+                <p><strong>Costo:</strong> {{ propuesta.Costo }}</p>
+                <p><strong>Fecha de Inicio:</strong> {{ propuesta.Inicio }}</p>
+                <p><strong>Fecha Final:</strong> {{ propuesta.FechaF }}</p>
+                <p><strong>Voto:</strong> {{ propuesta.voto }}</p>
+
+                <a href="{% url 'eliminarpropuesta' id_propuesta=propuesta.id %}">Eliminar</a>
+                <hr>
+            </li>
+        {% empty %}
+            <li>No hay propuestas disponibles.</li>
+        {% endfor %}
+    </ul>
+</div>
+
+</body>
+</html>
+
+{% endblock %}

@@ -1,0 +1,93 @@
+*,
+*:before,
+*:after {
+    box-sizing: border-box;
+}
+
+html {
+    overflow-y: scroll;
+}
+
+body {
+    background: #c1bdba;
+    font-family: "Titillium Web", sans-serif;
+}
+
+a {
+    text-decoration: none;
+    color: #1ab188;
+    transition: 0.5s ease;
+}
+a:hover {
+    color: #179b77;
+}
+
+h1 {
+    text-align: center;
+    color: #1ab188;
+    font-weight: 700;
+    margin: 20px 0 30px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.votacion-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.propuestas-list {
+    list-style: none;
+    padding: 0;
+    background-color: #333a40;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.propuesta-item {
+    background: #1e2a30;
+    color: #ffffff;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    position: relative;
+}
+
+.propuesta-item strong {
+    color: #1ab188;
+}
+
+.propuesta-item hr {
+    border: 1px solid #444;
+}
+
+.voto-buttons {
+    margin-top: 10px;
+}
+
+.login-prompt {
+    color: #ff4d4d;
+    font-weight: bold;
+}
+
+.button {
+    border: 0;
+    outline: none;
+    border-radius: 0;
+    padding: 15px 0;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    background: #1ab188;
+    color: #ffffff;
+    transition: all 0.5s ease;
+    -webkit-appearance: none;
+    cursor: pointer;
+    margin-right: 5px; /* Espacio entre botones */
+}
+.button:hover,
+.button:focus {
+    background: #179b77;
+}

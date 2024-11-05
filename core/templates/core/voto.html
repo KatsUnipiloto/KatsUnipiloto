@@ -1,0 +1,67 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Votación de Propuestas</title>
+    <link rel="stylesheet" href="{% static 'css/plantillavotos.css' %}"> <!-- Ajusta la ruta según tu proyecto -->
+</head>
+<body>
+
+<div class="votacion-container">
+    <h1>DA TU VOTO</h1>
+    <ul class="propuestas-list">
+        {% for propuesta in propuestas %}
+            <li class="propuesta-item">
+                <h3>{{ propuesta.id }}. {{ propuesta.Titulo }}</h3>
+                <p><strong>Descripción:</strong> {{ propuesta.Descripcion }}</p>
+                <p>
+                    <strong>Votos a favor:</strong> {{ propuesta.votes_up }} |
+                    <strong>Votos en contra:</strong> {{ propuesta.votes_down }}
+                </p>
+
+                {% if user.is_authenticated %}
+                    <div class="voto-buttons">
+                        <button onclick="votar({{ propuesta.id }}, 'up')">Votar a Favor</button>
+                        <button onclick="votar({{ propuesta.id }}, 'down')">Votar en Contra</button>
+                    </div>
+                {% else %}
+                    <p class="login-prompt">Inicia sesión para votar</p>
+                {% endif %}
+
+                <hr>
+            </li>
+        {% empty %}
+            <li>No hay propuestas disponibles.</li>
+        {% endfor %}
+    </ul>
+</div>
+
+<script>
+    function votar(propuestaId, voteType) {
+        fetch(`/votar/${propuestaId}/${voteType}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message) {
+                alert(data.message);
+            } else {
+                location.reload();
+            }
+        });
+    }
+</script>
+
+</body>
+</html>
+
+{% endblock %}

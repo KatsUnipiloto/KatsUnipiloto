@@ -1,0 +1,109 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio - Estadísticas de Propuestas</title>
+    <link rel="stylesheet" href="{% static 'css/plantillahome.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Carga Chart.js desde CDN -->
+</head>
+<body>
+
+<div class="propuestas-container">
+    <h3>Estadísticas</h3>
+    <hr>
+
+    <h1>Estadísticas de las propuestas</h1>
+    
+    <!-- Lista de Propuestas -->
+    <ul>
+        {% for propuesta in propuestas %}
+            <li>
+                <p><strong>Título:</strong> {{ propuesta.Titulo }}</p>
+                <p><strong>Descripción:</strong> {{ propuesta.Descripcion }}</p>
+                <p><strong>Votos a favor:</strong> {{ propuesta.votes_up }}</p>
+                <p><strong>Votos en contra:</strong> {{ propuesta.votes_down }}</p>
+                
+                <!-- Agregar un canvas único para cada propuesta -->
+                <canvas id="votesChart{{ forloop.counter }}" width="400" height="200"></canvas>
+                <hr>
+            </li>
+        {% empty %}
+            <li>No hay propuestas disponibles.</li>
+        {% endfor %}
+    </ul>
+
+</div>
+
+<!-- Script para la Gráfica -->
+<script>
+    // Iterar sobre las propuestas y crear gráficos para cada una
+    const labels = [
+        {% for propuesta in propuestas %}
+            "{{ propuesta.Titulo }}",
+        {% endfor %}
+    ];
+
+    // Configura las graficas para cada propuesta
+    {% for propuesta in propuestas %}
+        const ctx{{ forloop.counter }} = document.getElementById('votesChart{{ forloop.counter }}').getContext('2d');
+        const votesChart{{ forloop.counter }} = new Chart(ctx{{ forloop.counter }}, {
+            type: 'bar',
+            data: {
+                labels: ['Votos a Favor', 'Votos en Contra'],
+                datasets: [
+                    {
+                        label: '{{ propuesta.Titulo }} - Votos',
+                        data: [{{ propuesta.votes_up }}, {{ propuesta.votes_down }}],
+                        backgroundColor: [
+                            'rgba(75, 192, 192, 0.5)',
+                            'rgba(255, 99, 132, 0.5)'
+                        ],
+                        borderColor: [
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(255, 99, 132, 1)'
+                        ],
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            afterLabel: function(tooltipItem) {
+                                const votesUp = {{ propuesta.votes_up }};
+                                const votesDown = {{ propuesta.votes_down }};
+                                let winningMessage = '';
+
+                                if (votesUp > votesDown) {
+                                    winningMessage = 'Ganando: Votos a Favor';
+                                } else if (votesDown > votesUp) {
+                                    winningMessage = 'Ganando: Votos en Contra';
+                                } else {
+                                    winningMessage = 'Empate';
+                                }
+                                return [winningMessage];
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    {% endfor %}
+</script>
+
+</body>
+</html>
+
+{% endblock %}

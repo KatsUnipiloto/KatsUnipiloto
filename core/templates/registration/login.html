@@ -1,0 +1,89 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<link type="text/css" rel="stylesheet" href="{% static 'css/plantillacsshome.css' %}" />
+
+<div class="form">
+    <ul class="tab-group">
+        <li class="tab active"><a href="#signup">Sign Up</a></li>
+        <li class="tab"><a href="#login">Log In</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <!-- Sign Up Form -->
+        <div id="signup">
+            <h1>Sign Up for Free</h1>
+            <form action="/" method="post">
+                {% csrf_token %}
+                
+                    <div class="field-wrap">
+                        <label><span class="req"></span></label>
+                        <input type="text" name="username" required autocomplete="off" placeholder="username" />
+                    </div>
+                <div class="top-row">
+                    <div class="field-wrap">
+                        <label><span class="req"></span></label>
+                        <input type="text" name="first_name" required autocomplete="off" placeholder="First name" />
+                    </div>
+                    <div class="field-wrap">
+                        <label><span class="req"></span></label>
+                        <input type="text" name="last_name" required autocomplete="off" placeholder="Last name"/>
+                    </div>
+                </div>
+                <div class="field-wrap">
+                    <label><span class="req"></span></label>
+                    <input type="email" name="email" required autocomplete="off" placeholder="Email Address"/>
+                </div>
+                <div class="field-wrap">
+                    <label><span class="req"></span></label>
+                    <input type="password" name="password" required autocomplete="off" placeholder="Set a password" />
+                </div>
+
+                <button type="submit" class="button button-block">Get Started</button>
+            </form>
+            
+        </div>
+
+        <!-- Log In Form -->
+        <div id="login" style="display: none;">
+            <h1>Welcome Back!</h1>
+
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="field-wrap">
+                    <input type="" name="username" required autocomplete="off" placeholder="Nombre del Usuario" />
+                </div>
+                <div class="field-wrap">
+                    <input type="password" name="password" required autocomplete="off" placeholder="Contraseña" />
+                </div>
+
+                <p class="forgot"><a href="#">Forgot Password?</a></p>
+                <button type="submit" class="button button-block">Log In</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const tabs = document.querySelectorAll(".tab a");
+        const contents = document.querySelectorAll(".tab-content > div");
+
+        tabs.forEach((tab, index) => {
+            tab.addEventListener("click", function(event) {
+                event.preventDefault();
+                // Remove active class from all tabs
+                tabs.forEach(t => t.parentElement.classList.remove("active"));
+                // Hide all content divs
+                contents.forEach(content => content.style.display = "none");
+
+                // Add active class to clicked tab and show corresponding content
+                this.parentElement.classList.add("active");
+                contents[index].style.display = "block";
+            });
+        });
+    });
+</script>
+
+{% endblock %}
