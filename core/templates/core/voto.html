@@ -20,6 +20,8 @@
             <li class="propuesta-item">
                 <h3>{{ propuesta.id }}. {{ propuesta.Titulo }}</h3>
                 <p><strong>Descripción:</strong> {{ propuesta.Descripcion }}</p>
+                <p><strong>Tiempo restante:</strong> <span id="timer-{{ propuesta.id }}"></span></p>
+
                 <p>
                     <strong>Votos a favor:</strong> {{ propuesta.votes_up }} |
                     <strong>Votos en contra:</strong> {{ propuesta.votes_down }}
@@ -60,6 +62,34 @@
         });
     }
 </script>
+
+<script>
+    function countdown(endTime, elementId) {
+        const timerElement = document.getElementById(elementId);
+        function updateTimer() {
+            const now = new Date().getTime();
+            const timeLeft = endTime - now;
+    
+            if (timeLeft <= 0) {
+                timerElement.innerHTML = "Tiempo agotado";
+                return;
+            }
+    
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+    
+            timerElement.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+        }
+        updateTimer();
+        setInterval(updateTimer, 1000);
+    }
+    
+    {% for propuesta in propuestas %}
+        countdown(new Date("{{ propuesta.FechaFin|date:'Y-m-d H:i:s' }}").getTime(), "timer-{{ propuesta.id }}");
+    {% endfor %}
+    </script>
 
 </body>
 </html>

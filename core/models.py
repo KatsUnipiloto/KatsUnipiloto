@@ -5,17 +5,23 @@ from django.contrib.auth.models import User
 class SolPropuesta(models.Model):
 
     id = models.AutoField(primary_key=True)
-    Titulo = models.CharField(max_length=255, default="Untitled")
-    Descripcion = models.TextField(max_length=555, default="Untitled")
-    Zona = models.CharField(max_length=255, default="Untitled")
-    Costo = models.CharField(max_length=255, default="Untitled")
+    Titulo = models.CharField(max_length=255, default="")
+    Descripcion = models.TextField(max_length=555, default="")
+    Zona = models.CharField(max_length=255, default="")
+    Costo = models.CharField(max_length=255, default="")
     Inicio = models.DateTimeField(default=timezone.now)
     FechaF = models.DateTimeField(default=timezone.now)
-    votes_up = models.IntegerField(default=0)  # Agrega este campo
-    votes_down = models.IntegerField(default=0)  # Agrega este campo
+    FechaInicio = models.DateTimeField(default=timezone.now) 
+    FechaFin = models.DateTimeField(default=timezone.now)     
+    votes_up = models.IntegerField(default=0)
+    votes_down = models.IntegerField(default=0)  
 
     def __str__(self):
         return self.Titulo  # Corrected to match the field name
+    
+    def esta_activa(self):
+        now = timezone.now()
+        return self.FechaInicio <= now <= self.FechaFin
 
 class Vote(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

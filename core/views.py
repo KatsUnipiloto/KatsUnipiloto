@@ -13,13 +13,14 @@ from .forms import CustomUserCreationForm
 from django.contrib.auth import authenticate, login
 from .models import PerfilUsuario
 from django.shortcuts import render
+from .decorators import usuario_ciudadano_required, usuario_admin_required
 
 
 
 
 @login_required
 def home(request):
-    propuestas = SolPropuesta.objects.all()
+    propuestas = [propuesta for propuesta in SolPropuesta.objects.all() if propuesta.esta_activa()]
     tipos_usuarios= PerfilUsuario.TIPOS_USUARIO
     tipo_usuario = request.user.perfilusuario
     context = {
@@ -32,6 +33,7 @@ def home(request):
     return render(request, 'core/home.html', context)
 
 @login_required
+@usuario_admin_required
 def estadisticas(request):
     propuestas = SolPropuesta.objects.all()
     return render(request, 'core/estadisticas.html', {'propuestas': propuestas})
@@ -45,6 +47,7 @@ def exit(request):
     logout(request)
     return redirect('home')
 
+@usuario_admin_required
 def enviar_propuesta(request):
     if request.method == 'POST':
         form = PropuestaForm(request.POST)
@@ -83,7 +86,9 @@ def register(request):
 
     return render(request, 'registration/register.html', data)
 
+
 @login_required
+@usuario_ciudadano_required
 def votar(request, propuesta_id, vote_type):
     propuesta = get_object_or_404(SolPropuesta, id=propuesta_id)
     existing_vote = Vote.objects.filter(user=request.user, propuesta=propuesta).first()
@@ -104,6 +109,7 @@ def votar(request, propuesta_id, vote_type):
 
 
 @login_required
+@usuario_ciudadano_required
 def voto(request):
     propuestas = SolPropuesta.objects.all()
     return render(request, 'core/voto.html', {'propuestas': propuestas})

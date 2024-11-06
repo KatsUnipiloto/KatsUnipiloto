@@ -15,7 +15,7 @@ class CustomUserCreationForm(UserCreationForm):
             ('Ciudadano', "Ciudadano"),
         ]
     
-    tipo_usuario = forms.ChoiceField(choices=TIPO_USUARIO_CHOICES, label="Tipo de Usuario"),
+    tipo_usuario = forms.ChoiceField(choices=TIPO_USUARIO_CHOICES, label="Tipo de Usuario")
 
     class Meta:
         model = User
@@ -41,10 +41,12 @@ class CustomUserCreationForm(UserCreationForm):
 class PropuestaForm(forms.ModelForm):
     class Meta:
         model = SolPropuesta
-        fields = ['Titulo', 'Descripcion', 'Zona', 'Costo', 'Inicio', 'FechaF']
+        fields = ['Titulo', 'Descripcion', 'Zona', 'Costo', 'Inicio', 'FechaF', 'FechaInicio', 'FechaFin']
         widgets = {
             'Inicio': forms.DateInput(attrs={'type': 'date'}),
             'FechaF': forms.DateInput(attrs={'type': 'date'}),
+            'FechaInicio': forms.DateInput(attrs={'type': 'date'}),
+            'FechaFin': forms.DateInput(attrs={'type': 'date'}),
 
         }
 

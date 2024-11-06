@@ -12,21 +12,27 @@
         <nav class="container">
             <ul class="navbar">
                 <li><a href="{% url 'home' %}">Home</a></li>
-                
-                {% if request.user.is_authenticated %}    
-                    <li><a href="{% url 'enviar_propuesta' %}">Enviar propuesta</a></li>    
-                    <li><a href="{% url 'voto' %}">votar</a></li>
-                    <li><a href="{% url 'estadisticas' %}">estadisticas</a></li>
-                    <li><a href="{% url 'exit' %}">Salir</a></li>
-                {% else %}
-                   <li><a href="{% url 'login' %}">Ingresar</a></li>
-                   <li><a href="{% url 'register' %}">Register</a></li>
 
+                {% if request.user.is_authenticated %}
+                    {% if request.user.perfilusuario.tipo_usuario == 'administrador' %}
+                        <!-- Opciones para administradores -->
+                        <li><a href="{% url 'enviar_propuesta' %}">Enviar Propuesta</a></li>
+                        <li><a href="{% url 'estadisticas' %}">Estadísticas</a></li>
+                        <li><a href="{% url 'exit' %}">Salir</a></li>
+                    {% elif request.user.perfilusuario.tipo_usuario == 'Ciudadano' %}
+                        <!-- Opciones para ciudadanos -->
+                        <li><a href="{% url 'voto' %}">Votar</a></li>
+                        <li><a href="{% url 'exit' %}">Salir</a></li>
+                    {% endif %}
+                {% else %}
+                    <!-- Opciones para usuarios no autenticados -->
+                    <li><a href="{% url 'login' %}">Ingresar</a></li>
+                    <li><a href="{% url 'register' %}">Registrarse</a></li>
                 {% endif %}
             </ul>
         </nav>
     </header>
-    
+
     {% block content %}{% endblock %}
 </body>
 </html>
